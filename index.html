@@ -75,7 +75,7 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
   gap:6px;
 }
 
-/* --- NOVA SEÇÃO "POR QUE EU TE AMO?" --- */
+/* --- POR QUE EU TE AMO --- */
 #love-reasons-box{
   background:var(--glass);
   border:1px solid rgba(255,255,255,0.04);
@@ -119,8 +119,7 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
   }
 }
 
-/* --- RESTANTE DO SEU CSS (SEM MUDAR NADA) --- */
-
+/* POPUP */
 .popup{
   position: fixed;
   top:0;
@@ -158,7 +157,7 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
 .floating-phrase{position:absolute;font-weight:700;color:var(--accent);font-size:20px;pointer-events:none;text-shadow:0 0 6px rgba(225,29,45,0.8);animation:floatPhrase linear forwards;}
 @keyframes floatPhrase {0%{opacity:0;transform:translateY(0) translateX(0);}10%{opacity:1;}100%{opacity:0;transform:translateY(-200px) translateX(50px);}}
 
-/* CORAÇÕES NEVE */
+/* CORAÇÕES */
 .heart-snow {
   position: fixed;
   top: -30px;
@@ -172,18 +171,6 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
 @keyframes fall {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-}
-
-.fotos{display:flex;flex-direction:column;gap:12px;}
-.foto{background:#111;border-radius:10px;padding:6px;display:flex;align-items:center;justify-content:center;min-height:160px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);}
-.foto img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
-
-@media(max-width:880px){
-  main{display:block;}
-  .mensagem{font-size:16px;}
-  .rec-btn{font-size:13px;padding:6px 10px;}
-  .timeline{gap:30px;}
-  .event{min-width:100px;}
 }
 </style>
 </head>
@@ -201,12 +188,9 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
   <button class="rec-btn" onclick="showRec(2)">❤️ Recadinho 2</button>
   <button class="rec-btn" onclick="showRec(3)">😍 Recadinho 3</button>
   <button class="rec-btn" onclick="showRec(4)">😘 Recadinho 4</button>
-
-  <!-- BOTÃO NOVO -->
   <button class="rec-btn" onclick="toggleReasons()">💘 Por que eu te amo?</button>
 </div>
 
-<!-- POPUP -->
 <div id="popup" style="display:none;" class="popup">
   <div class="popup-box">
     <h3 id="popup-title"></h3>
@@ -215,11 +199,8 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
   </div>
 </div>
 
-<!-- NOVA SESSÃO -->
 <div id="love-reasons-box">
-
   <h2>💘 Por que eu te amo</h2>
-
   <div class="reasons-grid">
     <div class="reason-card">Porque você ilumina os meus dias.</div>
     <div class="reason-card">Porque seu sorriso (o mais lindo do mundo) me motiva a ser bom para poder ve-lo cada vez mais.</div>
@@ -230,14 +211,17 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
     <div class="reason-card">Porque até seu jeito "Jamilly Gabriely😒" me faz ser o homem mais feliz do mundo.</div>
     <div class="reason-card">Porque ver que vc me escolhe todos os dias como seu namorado me faz querer valorizar cada vez mais essa escolha.</div>
   </div>
-
 </div>
 
 <div class="datas">
   <h2>💌 Nossas Datas</h2>
+
   <div class="data-item"><span>📅</span><p><strong>02/03/2025</strong> — Nosso primeiro beijo 💋</p></div>
-  <div class="data-item"><span>❤️</span><p><strong>06/06/2025</strong> — Começamos a namorar(dia mais feliz da minha vida) 💞</p></div>
+  <div class="data-item"><span>❤️</span><p><strong>06/06/2025</strong> — Começamos a namorar 💞</p></div>
   <div class="data-item"><span>💖</span><p><strong>06/06/2025</strong> — Primeiro "eu te amo" ✨</p></div>
+
+  <!-- (REMOVIDO: contador dentro das datas, como você pediu) -->
+
 </div>
 
 <div class="timeline-container">
@@ -260,7 +244,15 @@ main{display:grid;grid-template-columns:1fr;gap:24px;margin-top:20px;}
   </div>
 </div>
 
-<p style="margin-top:18px;text-align:center;color:#e11d2d;font-weight:600;font-size:18px;">Se você chegou até aqui... eu te amo mais que tudo</p>
+<!-- ❤️ CONTADOR NO FINAL (NOVO) -->
+<div style="text-align:center;margin:30px 0;">
+  <p id="contador-feliz" style="font-size:20px;font-weight:600;color:#fff;"></p>
+</div>
+<!-- ❤️ FIM DO CONTADOR -->
+
+<p style="margin-top:10px;text-align:center;color:#e11d2d;font-weight:600;font-size:18px;">
+Se você chegou até aqui... eu te amo mais que tudo
+</p>
 
 <!-- ELEFANTE -->
 <div style="display:flex;justify-content:center;margin-top:12px;">
@@ -358,7 +350,36 @@ setInterval(() => {
   setTimeout(() => h.remove(), 8000);
 }, 300);
 
-// --- NOVA FUNÇÃO "POR QUE EU TE AMO?" ---
+// --- FUNÇÃO DO CONTADOR COMPLETO ---
+function atualizarContador() {
+  const inicio = new Date("2025-06-06T00:00:00");
+  const agora = new Date();
+
+  let diff = agora - inicio;
+
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= dias * (1000 * 60 * 60 * 24);
+
+  const horas = Math.floor(diff / (1000 * 60 * 60));
+  diff -= horas * (1000 * 60 * 60);
+
+  const minutos = Math.floor(diff / (1000 * 60));
+  diff -= minutos * (1000 * 60);
+
+  const segundos = Math.floor(diff / 1000);
+
+  document.getElementById("contador-feliz").innerHTML =
+    `Eu sou o homem mais feliz do mundo há 
+    <strong style="color:#e11d2d;">${dias}</strong> dias, 
+    <strong style="color:#e11d2d;">${horas}</strong> horas, 
+    <strong style="color:#e11d2d;">${minutos}</strong> minutos e 
+    <strong style="color:#e11d2d;">${segundos}</strong> segundos 💞`;
+}
+
+setInterval(atualizarContador, 1000);
+atualizarContador();
+
+// --- FUNÇÃO "POR QUE EU TE AMO?" ---
 function toggleReasons(){
   const box = document.getElementById("love-reasons-box");
   box.style.display = box.style.display === "block" ? "none" : "block";
